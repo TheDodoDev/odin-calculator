@@ -8,7 +8,7 @@ const DIV: number = 3;
 
 let currentNum: string = "";
 let previousNum: string = "";
-
+let operand: number = NONE;
 type ResultType = number | { error: string };
 function operate(num1: number, num2: number, operation: number): ResultType {
     switch (operation) {
@@ -69,7 +69,7 @@ let currentResult = document.querySelector(".current.result p");
 let previousResult = document.querySelector(".previous.result p");
 
 function appendNumber(e: Event): any {
-    if(e.currentTarget){
+    if(e.currentTarget && currentNum.length <= 10){
         let target = e.currentTarget as HTMLElement;
         currentNum += target.innerHTML;
     }
@@ -96,12 +96,76 @@ function clearNumber(e: Event): any {
     }
 }
 
+function setOperand(e: Event): any {
+    if(e.currentTarget) {
+        let target = e.currentTarget as HTMLButtonElement;
+        let op = target.innerHTML;
+        if(previousNum == "") {
+            if(op == "+") {
+                operand = ADD;
+            } else if(op == "-") {
+                operand = SUB;
+            } else if(op == "x") {
+                operand = MUL;
+            } else if(op == "÷") {
+                operand = DIV;
+            }
+            previousNum = currentNum;
+            currentNum = "";
+            if(currentResult) {
+                currentResult.innerHTML = currentNum;
+            }
+            if(previousResult) {
+                previousResult.innerHTML = previousNum;
+            }
+        } else {
+            let outcome = operate(parseFloat(previousNum), parseFloat(currentNum), operand);
+            previousNum = "" + outcome;
+            currentNum = "";
+            if(currentResult) {
+                currentResult.innerHTML = currentNum;
+            }
+            if(previousResult) {
+                previousResult.innerHTML = previousNum;
+            }
+
+            if(op == "+") {
+                operand = ADD;
+            } else if(op == "-") {
+                operand = SUB;
+            } else if(op == "x") {
+                operand = MUL;
+            } else if(op == "÷") {
+                operand = DIV;
+            }
+        }
+    }
+}
+
+function calculate(): void {
+    let outcome = operate(parseFloat(previousNum), parseFloat(currentNum), operand);
+    operand = NONE;
+    previousNum = "";
+    currentNum = "" + outcome;
+    if(currentResult) {
+        currentResult.innerHTML = currentNum;
+    }
+    if(previousResult) {
+        previousResult.innerHTML = previousNum;
+    }
+}
+
 for(let i = 0; i < 3; i++) {
     for(let j = 0; j < 3; j++) {
         buttons[i][j].addEventListener("click", appendNumber);
     }
 }
+
+for(let i = 0; i < 4; i++) {
+    buttons[i][3].addEventListener("click", setOperand);
+}
 functionButtons[3].addEventListener("click", deleteNumber);
 functionButtons[4].addEventListener("click", clearNumber)
+buttons[3][2].addEventListener("click", calculate);
 
 
