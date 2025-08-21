@@ -1,50 +1,14 @@
 import '../src/style.css'
 import { add, subtract, multiply, divide } from './operations.ts';
+const NONE: number = -1;
 const ADD: number = 0;
 const SUB: number = 1;
 const MUL: number = 2;
 const DIV: number = 3;
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-    <div class="container">
-        <div class="previous result">
-            <p>4</p>
-        </div>
-        <div class="current result">
-            <p>5</p>
-        </div>
-        <div class="row">
-        </div>
-    </div>
-`
+let currentNum: string = "";
+let previousNum: string = "";
 
-const buttonRow = document.querySelector(".row");
-const functions: string[] = ["+/-", "%", "√", "CE", "ON/C"];
-
-for (let i = 0; i < 5; i++) {
-    const button: HTMLButtonElement = document.createElement("button");
-    button.innerHTML = functions[i];
-    button.classList.add("function");
-    buttonRow?.appendChild(button);
-}
-
-const container = document.querySelector(".container");
-const numbersAndOperations: string[][] = [["1", "2", "3", "+"],
-                                          ["4", "5", "6", "-"],
-                                          ["7", "8", "9", "x"],
-                                          ["0", ".", "=", "÷"]];
-
-for(let i = 0; i < 4; i++) {
-    const row: HTMLDivElement = document.createElement("div");
-    row.classList.add("row");
-    for(let j = 0; j < 4; j++) {
-        const button: HTMLButtonElement = document.createElement("button");
-        button.innerHTML = numbersAndOperations[i][j];
-        button.classList.add("default-btn");
-        row.appendChild(button);
-    }
-    container?.appendChild(row);
-}
 type ResultType = number | { error: string };
 function operate(num1: number, num2: number, operation: number): ResultType {
     switch (operation) {
@@ -55,3 +19,89 @@ function operate(num1: number, num2: number, operation: number): ResultType {
         default: return { error: "ERROR" };
     }
 }
+
+
+document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+    <div class="container">
+        <div class="previous result">
+            <p></p>
+        </div>
+        <div class="current result">
+            <p></p>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+`
+
+const buttonRow = document.querySelector(".row");
+const functions: string[] = ["+/-", "%", "√", "CE", "ON/C"];
+const functionButtons: HTMLButtonElement[] = [];
+for (let i = 0; i < 5; i++) {
+    const button: HTMLButtonElement = document.createElement("button");
+    button.innerHTML = functions[i];
+    button.classList.add("function");
+    functionButtons.push(button);
+    buttonRow?.appendChild(button);
+}
+
+const container = document.querySelector(".container");
+const numbersAndOperations: string[][] = [["1", "2", "3", "+"],
+                                          ["4", "5", "6", "-"],
+                                          ["7", "8", "9", "x"],
+                                          ["0", ".", "=", "÷"]];
+const buttons: HTMLButtonElement[][] = [];
+for(let i = 0; i < 4; i++) {
+    const row: HTMLDivElement = document.createElement("div");
+    row.classList.add("row");
+    buttons.push([]);
+    for(let j = 0; j < 4; j++) {
+        const button: HTMLButtonElement = document.createElement("button");
+        button.innerHTML = numbersAndOperations[i][j];
+        button.classList.add("default-btn");
+        row.appendChild(button);
+        buttons[i][j] = button;
+    }
+    container?.appendChild(row);
+}
+
+let currentResult = document.querySelector(".current.result p");
+let previousResult = document.querySelector(".previous.result p");
+
+function appendNumber(e: Event): any {
+    if(e.currentTarget){
+        let target = e.currentTarget as HTMLElement;
+        currentNum += target.innerHTML;
+    }
+    if (currentResult) {
+        currentResult.innerHTML = currentNum;
+    }
+}
+
+function deleteNumber(e: Event): any {
+    if(currentResult) {
+        currentNum = currentNum.substring(0, currentNum.length - 1);
+        currentResult.innerHTML = currentNum;
+    }
+}
+
+function clearNumber(e: Event): any {
+    if(currentResult) {
+        currentNum = "";
+        currentResult.innerHTML = currentNum;
+    }
+    if(previousResult) {
+        previousNum = "";
+        previousResult.innerHTML = previousNum;
+    }
+}
+
+for(let i = 0; i < 3; i++) {
+    for(let j = 0; j < 3; j++) {
+        buttons[i][j].addEventListener("click", appendNumber);
+    }
+}
+functionButtons[3].addEventListener("click", deleteNumber);
+functionButtons[4].addEventListener("click", clearNumber)
+
+
