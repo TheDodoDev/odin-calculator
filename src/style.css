@@ -21,6 +21,73 @@ body {
   min-height: 100vh;
 }
 
+p {
+  color: white;
+  margin: 4px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  height: 600px;
+  background-color: slategray;
+}
+
+.previous {
+  width: 150px;
+  height: 25px;
+  align-self: flex-end;
+  margin-right: 25px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.previous p {
+  font-size: 16px;
+}
+
+.current {
+  width: 400px;
+  height: 50px;
+  align-self: center;
+}
+
+.current p {
+  font-size: 24px;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: #202020;
+  border-radius: 4px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+  width: 400px;
+  margin-bottom: 8px;
+}
+
+.function {
+  width: 60px;
+  height: 30px;
+  background-color: #bb3535;
+  border: none;
+  margin-top: 8px;
+}
+
+.default-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  border: none;
+}
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
