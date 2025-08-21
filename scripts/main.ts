@@ -155,17 +155,26 @@ function calculate(): void {
     }
 }
 
+function addDecimal(): void {
+    if(!currentNum.includes(".")) {
+        currentNum += ".";
+        if(currentResult) {
+            currentResult.innerHTML = currentNum;
+        }
+    }
+}
+
 for(let i = 0; i < 3; i++) {
     for(let j = 0; j < 3; j++) {
         buttons[i][j].addEventListener("click", appendNumber);
     }
 }
-
+buttons[3][0].addEventListener("click", appendNumber);
 for(let i = 0; i < 4; i++) {
     buttons[i][3].addEventListener("click", setOperand);
 }
 functionButtons[3].addEventListener("click", deleteNumber);
 functionButtons[4].addEventListener("click", clearNumber)
 buttons[3][2].addEventListener("click", calculate);
-
+buttons[3][1].addEventListener("click", addDecimal);
 

@@ -10,7 +10,11 @@ function multiply(multiplicand: number, multiplier: number): number {
     return multiplicand * multiplier;
 }
 
-function divide(dividend: number, divisor: number): number {
+function divide(dividend: number, divisor: number): any {
+    if(divisor == 0) {
+        alert("Don't Try Mate...");
+        return;
+    }
     return dividend / divisor;
 }
 
